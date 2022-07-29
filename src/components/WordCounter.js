@@ -1,84 +1,55 @@
 import React, { useState } from "react";
 
-function WordCounter() {
-  const [countString, setcountString] = useState("");
-  const [countArray, setCountArray] = useState([]);
-  const [wordLimit, setWordLimit] = useState(50);
-  const [fontSizeManage, setFontSizeManage] = useState(16);
+const App = () => {
+  const [limit, setLimit] = useState(50);
+  const [fs, setFs] = useState(16);
+  const [wordCount, setWordsCount] = useState(0);
+  const [charCount, setCharCount] = useState(0);
+  const [text, setText] = useState("");
 
-  const onChangeHandler = (e) => {
-    setcountString(e.target.value);
-    setCountArray([...countString]);
+  const countHandler = (e) => {
+    setText(e.target.value);
+    setWordsCount(wordCounter(e.target.value));
+    setCharCount(e.target.value.length);
   };
-  // console.log(countArray)
-  let count = 0;
-  let countWord = 0;
-  for (let i = 0; i < countArray.length; i++) {
-    if (countArray[i] !== " ") {
-      count++;
-    }
+
+  function wordCounter(str) {
+    const arr = str.split(" ");
+    const newArr = arr.filter((a) => a !== "");
+    return newArr.length;
   }
-  for (let i = 0; i < countArray.length; i++) {
-    if (countArray[i] === " ") {
-      countWord++;
-    }
-  }
-  // console.log(count, countWord)
-  const wordLimitHandler = (e) => {
-    for (let i = 0; i < countArray.length; i++) {
-      if (countArray[i] !== " ") {
-        setWordLimit(e.target.value);
-      }
-    }
-  };
-
-  const fontSizeHandler = (e) => {
-    setFontSizeManage(e.target.value);
-  };
-  console.log(fontSizeManage);
-
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        marginTop: 60,
-        flexDirection: "column",
-        alignItems: "center",
-      }}
-    >
-      <label class="font-size">Font size picker</label>
+    <div id="main">
+      <label>Font Size Picker</label>
+      <br />
       <input
         type="range"
         id="fontSize-input"
-        min={16}
-        max={32}
-        onChange={fontSizeHandler}
+        min="16"
+        max="32"
+        value={fs}
+        onChange={(e) => setFs(e.target.value)}
       />
-      <label class="Word-limit">Word limit input</label>
+      <br />
+      <label>Word limit input</label>
+      <br />
       <input
-        type="number"
         id="char-limit-input"
-        value={wordLimit}
-        min={50}
-        onChange={wordLimitHandler}
+        type="number"
+        value={limit}
+        onChange={(e) => setLimit(e.target.value)}
       />
       <textarea
-        class="textarea"
-        type="textarea"
-        maxLength={wordLimit}
-        onChange={onChangeHandler}
-        style={{ fontSize: `${fontSizeManage}px` }}
-      />
-
-      <div id="word-counter">
-        <p>Total number of words written {countWord ? countWord + 1 : 0} </p>
-      </div>
-      <div id="char-counter">
-        <p>Total number of characters used {countString ? count + 1 : 0} </p>
-      </div>
+        rows="7"
+        maxLength={limit}
+        style={{ fontSize: `${fs}px` }}
+        value={text}
+        onChange={countHandler}
+      ></textarea>
+      <div id="word-counter">Total number of words written {wordCount}</div>
+      <div id="char-counter">Total numbers of characters used {charCount} </div>
     </div>
   );
-}
+};
 
-export default WordCounter;
+export default App;
